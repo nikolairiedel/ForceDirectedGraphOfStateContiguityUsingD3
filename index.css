@@ -26,6 +26,10 @@ body{
 	text-align: center;
 }
 
+#topHr{
+	position: absolute;
+}
+
 #svgGraphContainer{
 	position: absolute;
 	width: 80vw;
@@ -49,7 +53,7 @@ body{
 	overflow: visible;
 }
 
-#tooltip > g > text{
+#tooltip g text{
 	fill: white;
 }
 
