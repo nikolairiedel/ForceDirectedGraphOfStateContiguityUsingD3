@@ -41,6 +41,8 @@
 			const width = d3.select("body").style("width").split("").slice(0, -2).join("") - margin.left - margin.right;
 			const height = d3.select("body").style("height").split("").slice(0, -2).join("") - margin.top - margin.bottom;
 
+			let simulation = d3.forceSimulation();
+
 			// Append the headline
 			d3.select("#graphContainer").append("h1")
 				.text("Force directed graph of state contiguity")
@@ -63,7 +65,7 @@
 				if (error) throw error;
 
 				//Intialize the d3 simulation with a linkforce, collision force, and force the center of the simulation to the center of the screen.
-				let simulation = d3.forceSimulation(data.nodes)
+				simulation.nodes(data.nodes)
 					.force("link", d3.forceLink(data.links).id(function (d) { return d.index; }).distance(70).iterations(1))
 					.force("collide", d3.forceCollide(function (d) { return 20; }))
 					.force("center", d3.forceCenter(width / 2, height / 2));
@@ -95,16 +97,15 @@
 
 				// Called every time the simulation ticks...
 				let ticked = function () {
-
 					//Repositions the links with the constraint to keep them inside the graphContainer and between the horizontal lines
 					link.attr("x1", function (d) { return (Math.max(0, Math.min(width - 16, d.source.x))); })
-						.attr("y1", function (d) { return (Math.max(0 + d3.select("#headline").node().getBoundingClientRect().y + 15, Math.min(height - height / 10.5 - 11, d.source.y))); })
+						.attr("y1", function (d) { return (Math.max(0 + d3.select("#headline").node().getBoundingClientRect().height * 2, Math.min(height - height / 10.5 - 11, d.source.y))); })
 						.attr("x2", function (d) { return (Math.max(0, Math.min(width - 16, d.target.x))); })
-						.attr("y2", function (d) { return (Math.max(0 + d3.select("#headline").node().getBoundingClientRect().y + 15, Math.min(height - height / 10.5 - 11, d.target.y))); });
+						.attr("y2", function (d) { return (Math.max(0 + d3.select("#headline").node().getBoundingClientRect().height * 2, Math.min(height - height / 10.5 - 11, d.target.y))); });
 
 					//Same as the links 
 					nodes.style("left", function (d) { return (Math.max(0, Math.min(width - 16, d.x))) + "px"; })
-						.style("top", function (d) { return (Math.max(0 + d3.select("#headline").node().getBoundingClientRect().y + 15, Math.min(height - height / 10.5 - 11, d.y))) + "px"; });
+						.style("top", function (d) { return (Math.max(0 + d3.select("#headline").node().getBoundingClientRect().height * 2, Math.min(height - height / 10.5 - 11, d.y))) + "px"; });
 
 
 				};
